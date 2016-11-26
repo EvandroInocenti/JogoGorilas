@@ -4,12 +4,12 @@
 #include <stdlib.h>
 
 #define PI 3.141592
-#define janela_altura 800
-#define janela_largura 1200
-int larguraIni = -600, larguraFim = -450;
+#define janela_altura 600
+#define janela_largura 800
+int larguraIni = -400, larguraFim = -300;
 int alturaIni = -400, alturaFim = -100;
 int transladaBananaY = 130;
-int transladaBananaX = -500;
+int transladaBananaX = -350;
 
 void visualizacao() {
 	glMatrixMode(GL_PROJECTION);	//Matriz de projeção
@@ -48,8 +48,9 @@ void teclasEspeciais(int tecla, int x, int y){
 }
 
 void sol(){
+	// glTranslated(0, -100, 0);
 	glPushMatrix();
-	glTranslatef(0, 300, 0);
+	glTranslatef(0, 200, 0);
 	glColor3f(1.0, 1.0, 0.0);
 	GLfloat circ_pnt = 100;
 	GLfloat angCirc, raioX = 30.0f, raioY = 30.0f;
@@ -65,41 +66,41 @@ void sol(){
 
 	//raios
 	glBegin(GL_LINES);
-	glVertex2d(30, 300);
-	glVertex2d(60, 300);
-	glVertex2d(20, 320);
-	glVertex2d(40, 340);
-	glVertex2d(0, 330);
-	glVertex2d(0, 350);
-	glVertex2d(-30, 300);
-	glVertex2d(-60, 300);
-	glVertex2d(-20, 320);
-	glVertex2d(-40, 340);
-	glVertex2d(-20, 280);
-	glVertex2d(-40, 260);
+	glVertex2d(30, 200);
+	glVertex2d(60, 200);
+	glVertex2d(20, 220);
+	glVertex2d(40, 240);
+	glVertex2d(0, 230);
 	glVertex2d(0, 250);
-	glVertex2d(0, 270);
-	glVertex2d(20, 280);
-	glVertex2d(40, 260);
+	glVertex2d(-30, 200);
+	glVertex2d(-60, 200);
+	glVertex2d(-20, 220);
+	glVertex2d(-40, 240);
+	glVertex2d(-20, 180);
+	glVertex2d(-40, 160);
+	glVertex2d(0, 150);
+	glVertex2d(0, 170);
+	glVertex2d(20, 180);
+	glVertex2d(40, 160);
 	glEnd();
 
 	//Olhos
 	glColor3f(0.0, 0.0, 0.0);
 	glLineWidth(3);
 	glBegin(GL_LINES);
-	glVertex2d(-10, 310);
-	glVertex2d(-10, 317);
-	glVertex2d(-7, 313);
-	glVertex2d(-14, 313);
-	glVertex2d(10, 310);
-	glVertex2d(10, 317);
-	glVertex2d(6, 313);
-	glVertex2d(13, 313);
+	glVertex2d(-10, 210);
+	glVertex2d(-10, 217);
+	glVertex2d(-7, 213);
+	glVertex2d(-14, 213);
+	glVertex2d(10, 210);
+	glVertex2d(10, 217);
+	glVertex2d(6, 213);
+	glVertex2d(13, 213);
 	glEnd();
 
 	//boca
 	glPushMatrix();
-	glTranslatef(0, 290, 0);
+	glTranslatef(0, 190, 0);
 	GLfloat circ = 100;
 	GLfloat angBoca, rX = 14.0f, rY = 2.0f;
 	glBegin(GL_POLYGON);
@@ -121,6 +122,18 @@ void predio1(){
 		}
 	}
 	glEnd();
+}
+
+void predio2(){
+	/*glEnable(GL_TEXTURE_CUBE_MAP_EXT);
+
+	glTexGenfv(GL_S, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
+	glTexGenfv(GL_T, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
+	glTexGenfv(GL_R, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
+	glEnable(GL_TEXTURE_GEN_R);
+	*/
 }
 
 void banana(){
@@ -147,16 +160,16 @@ void colisao(){
 		
 		//teste de colisão
 			glBegin(GL_POINTS);
-			glVertex2i(-550, -100);
-			glVertex2i(-555, -105);
-			glVertex2i(-550, -105);
-			glVertex2i(-555, -100);
+			glVertex2i(-350, -100);
+			glVertex2i(-355, -105);
+			glVertex2i(-350, -105);
+			glVertex2i(-355, -100);
 			glEnd();
 
 	
 			printf("colidiu na altura %d: \n", transladaBananaX);
 			transladaBananaY = 130;
-			transladaBananaX = -500;
+			transladaBananaX = -350;
 		}
 	}
 
@@ -207,7 +220,7 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(janela_largura, janela_altura);  // tamanho da janela
-	glutInitWindowPosition(100, 100); // posicao que surge a janela
+	glutInitWindowPosition(200, 50); // posicao que surge a janela
 	glutCreateWindow("Jogo Gorilas");//Cria janela
 	glutReshapeFunc(janela);
 	glutDisplayFunc(desenha);
