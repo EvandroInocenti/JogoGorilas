@@ -10,6 +10,8 @@ int larguraIni = -400, larguraFim = -300;
 int alturaIni = -400, alturaFim = -100;
 int transladaBananaY = 130;
 int transladaBananaX = -350;
+int angRotBan;
+
 
 void visualizacao() {
 	glMatrixMode(GL_PROJECTION);	//Matriz de projeção
@@ -48,10 +50,9 @@ void teclasEspeciais(int tecla, int x, int y){
 }
 
 void sol(){
-	// glTranslated(0, -100, 0);
 	glPushMatrix();
 	glTranslatef(0, 200, 0);
-	glColor3f(1.0, 1.0, 0.0);
+	glColor3f(1.0, 0.6, 0.2);
 	GLfloat circ_pnt = 100;
 	GLfloat angCirc, raioX = 30.0f, raioY = 30.0f;
 	GLfloat ang = 2 * PI;
@@ -140,13 +141,24 @@ void banana(){
 	glColor3f(1.0, 1.0, 0.0);
 	glPushMatrix();
 	glTranslatef(transladaBananaX, transladaBananaY, 0);
+	glRotated(angRotBan, 1, 1, 0);
+	glLineWidth(5);
+	glBegin(GL_LINE_STRIP);
+	glVertex2i(8, 5);
+	glVertex2i(0, 0);
+	glVertex2i(-5, 0);
+	glVertex2i(-13, 5);
+	
+	/*
 	glBegin(GL_QUADS);
 	glVertex2i(-10, -10);
 	glVertex2i(-10, 10);
 	glVertex2i(10, 10);
 	glVertex2i(10, -10);
+	*/
 	glEnd();
 	glPopMatrix();
+
 }
 
 void colisao(){
@@ -166,19 +178,18 @@ void colisao(){
 			glVertex2i(-355, -100);
 			glEnd();
 
-	
 			printf("colidiu na altura %d: \n", transladaBananaX);
 			transladaBananaY = 130;
 			transladaBananaX = -350;
 		}
 	}
-
 }
 
 void animacao(int valor){
 
 	if (transladaBananaY < 1200){
 		transladaBananaY -= 10;
+		angRotBan -= 90;
 	}
 
 	glutPostRedisplay();
