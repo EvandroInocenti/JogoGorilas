@@ -2,15 +2,50 @@
 #include <GL/freeglut.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <random>
 
 #define PI 3.141592
 #define janela_altura 600
 #define janela_largura 800
+
+typedef struct {
+	int x;
+	int y;
+	bool ativo;
+} PONTO;
+
+typedef struct {
+	PONTO pontos[80][400];
+	int altura;
+	int lagura;
+	int posIni;
+	float red;
+	float green;
+	float blue;
+} PREDIO;
+
+
+//DECLARAÇÃO DE FUNCOES
+
+PREDIO* createPredio(int posIni, int largura = 0);
+PREDIO* createPredios();
+PREDIO* putPredio(PREDIO* predios, PREDIO* newPredio);
+void pintarPredio(PREDIO* predio);
+void pintarPredios(PREDIO* predios, int qtdePredios);
+
+bool criarPredios = true;
+
 int larguraIni = -400, larguraFim = -300;
 int alturaIni = -400, alturaFim = -100;
-int transladaBananaY = 130;
-int transladaBananaX = -350;
+
+int transladaBananaY = 500;
+int transladaBananaX = 20;
+
 int angRotBan;
+
+PREDIO* predios;
+int qtdePredios;
 
 
 void visualizacao() {
@@ -37,10 +72,10 @@ void teclado(unsigned char key, int x, int y) {
 void teclasEspeciais(int tecla, int x, int y){
 	switch (tecla){
 	case GLUT_KEY_LEFT:
-		
+
 		break;
 	case GLUT_KEY_RIGHT:
-		
+
 		break;
 	default:
 		break;
@@ -113,42 +148,97 @@ void sol(){
 	glPopMatrix();
 }
 
-void predio1(){
-	glColor3f(1.0, 0.0, 0.0);
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	for (int x = larguraIni; x <= larguraFim; x++){
-		for (int y = alturaIni; y <= alturaFim; y++){
-			glVertex2i(x, y);
+PREDIO* createPredio(int posIni, int largura) {
+	PREDIO* predio = (PREDIO*) malloc(sizeof(PREDIO));
+	predio->posIni = posIni;
+	predio->altura = (rand() % 201) + 200;
+	if (largura > 0)
+		predio->lagura = largura;
+	else
+		predio->lagura = (rand() % 11) + 70;
+
+	predio->red = (rand() % 100) + 1;
+	predio->green = (rand() % 100) + 1;
+	predio->blue = (rand() % 100) + 1;
+
+	predio->red /= 100.0;
+	predio->green /= 100.0;
+	predio->blue /= 100.0;
+
+	printf("\n red %0.2f - green %0.2f - blue %0.2f ", predio->red, predio->green, predio->blue);
+
+	for (int x = 0; x <= predio->lagura; x++) // linha
+	{
+		for (int y = 0; y <= predio->altura; y++) {
+			predio->pontos[x][y].ativo = true;
+			predio->pontos[x][y].x = x + posIni;
+			predio->pontos[x][y].y = y;
 		}
 	}
-	glEnd();
+	return predio;
 }
 
-void predio2(){
-	/*glEnable(GL_TEXTURE_CUBE_MAP_EXT);
+PREDIO* putPredio(PREDIO* predios, PREDIO* newPredio) {
+	qtdePredios++;
+	PREDIO* lstPredios = (PREDIO*) calloc(qtdePredios, sizeof(PREDIO));
 
-	glTexGenfv(GL_S, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
-	glTexGenfv(GL_T, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
-	glTexGenfv(GL_R, GL_TEXTURE_GEN_MODE, GL_NORMAL_MAP_EXT);
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
-	glEnable(GL_TEXTURE_GEN_R);
-	*/
+	for (int i = 0; i < (qtdePredios-1); i++)
+	{
+		lstPredios[i] = predios[i];
+	}
+	lstPredios[qtdePredios - 1] = *newPredio;//verifcar memori leak
+	return lstPredios;
+}
+
+PREDIO* createPredios() {
+	int larguraTotalAtual = 0; 
+
+	while (larguraTotalAtual < janela_largura){
+		PREDIO* newPredio = createPredio(larguraTotalAtual);
+		larguraTotalAtual += newPredio->lagura;
+		predios = putPredio(predios, newPredio);
+	}
+	return predios;
+}
+
+void pintarPredios(PREDIO* predios, int qtdePredios){
+	for (int i = 0; i < qtdePredios; i++)
+	{
+		pintarPredio(predios);
+		predios++;
+	}
+}
+
+void pintarPredio(PREDIO* predio) {
+	glColor3f(predio->red, predio->green, predio->blue);
+	for (int x = 0; x <= predio->lagura; x++){
+		for (int y = 0; y <= predio->altura; y++){
+			if (!predio->pontos[x][y].ativo)
+				continue;
+			int xPonto = predio->pontos[x][y].x;
+			int yPonto = predio->pontos[x][y].y;
+			glBegin(GL_QUADS);
+			glVertex2i(xPonto, yPonto);
+			glVertex2i(xPonto + 1, yPonto);
+			glVertex2i(xPonto + 1, yPonto + 1);
+			glVertex2i(xPonto, yPonto + 1);
+			glEnd();
+		}
+	}
 }
 
 void banana(){
 	glColor3f(1.0, 1.0, 0.0);
 	glPushMatrix();
 	glTranslatef(transladaBananaX, transladaBananaY, 0);
-	glRotated(angRotBan, 1, 1, 0);
+	glRotated(angRotBan, 0, 0, 1);
 	glLineWidth(5);
 	glBegin(GL_LINE_STRIP);
 	glVertex2i(8, 5);
 	glVertex2i(0, 0);
 	glVertex2i(-5, 0);
 	glVertex2i(-13, 5);
-	
+
 	/*
 	glBegin(GL_QUADS);
 	glVertex2i(-10, -10);
@@ -162,34 +252,41 @@ void banana(){
 }
 
 void colisao(){
-	//printf("colidiu na altura %d: \n", transladaBananaY);
 
-	if ((transladaBananaY == alturaFim + 10)) {
-		if ((transladaBananaX >= larguraIni) && (transladaBananaX <= larguraFim)){
-			
-			glColor3i(0.0, 0.0, 1.0);
-			glPointSize(5);
-		
-		//teste de colisão
-			glBegin(GL_POINTS);
-			glVertex2i(-350, -100);
-			glVertex2i(-355, -105);
-			glVertex2i(-350, -105);
-			glVertex2i(-355, -100);
-			glEnd();
+	
+	for (int i = 0; i < qtdePredios; i++)
+	{
+		//printf("colidiu na altura %d: \n", transladaBananaY);
 
-			printf("colidiu na altura %d: \n", transladaBananaX);
-			transladaBananaY = 130;
-			transladaBananaX = -350;
+		if ((transladaBananaY <= predios[i].altura)) {
+			if ((transladaBananaX >= predios[i].posIni) && (transladaBananaX <= (predios[i].posIni + predios[i].lagura))){
+
+				glColor3i(0.0, 0.0, 1.0);
+				glPointSize(5);
+
+				//teste de colisão
+				glBegin(GL_POINTS);
+				glVertex2i(-350, -100);
+				glVertex2i(-355, -105);
+				glVertex2i(-350, -105);
+				glVertex2i(-355, -100);
+				glEnd();
+
+				printf("colidiu na altura %d: \n", transladaBananaX);
+				transladaBananaY = 500;
+				transladaBananaX = 20;
+			}
 		}
 	}
+
+
 }
 
 void animacao(int valor){
 
 	if (transladaBananaY < 1200){
 		transladaBananaY -= 10;
-		angRotBan -= 90;
+		angRotBan -= 45;
 	}
 
 	glutPostRedisplay();
@@ -202,13 +299,16 @@ void desenha() {
 	glLoadIdentity();
 	glClearColor(0.0f, 0.0f, 1.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glTranslatef(janela_largura / 2, janela_altura / 2, 0.0f);
+
+	//glTranslatef(janela_largura / 2, janela_altura / 2, 0.0f);
+
 	glViewport(0, 0, janela_largura, janela_altura);
 	sol();
 	banana();
-	predio1();
+	//predio1();
+	pintarPredios(predios, qtdePredios);
 	colisao();
-	
+
 
 	glutSwapBuffers();
 }
@@ -228,6 +328,10 @@ void inicializa() {
 }
 
 int main(int argc, char** argv) {
+	if (criarPredios) {
+		predios = createPredios();
+		criarPredios = false;
+	}
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(janela_largura, janela_altura);  // tamanho da janela
