@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <random>
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 
 #define PI 3.141592
 #define janela_altura 600
@@ -43,6 +46,11 @@ int alturaIni = -400, alturaFim = -100;
 int transladaBananaY = 500;
 int transladaBananaX = 20;
 
+int velocidade = 0, angArremesso = 0, vento = 0;
+char vel[2] = { 0 }, arremesso[2] = { 0 }, vnt[2] = { 0 };
+float gravidade = 9.8;
+
+
 int angRotBan;
 
 PREDIO* predios;
@@ -68,21 +76,6 @@ void teclado(unsigned char key, int x, int y) {
 	}
 	visualizacao();			//Método que aplica os novos parâmetros
 	glutPostRedisplay();	//Força redesenho
-}
-
-void teclasEspeciais(int tecla, int x, int y){
-	switch (tecla){
-	case GLUT_KEY_LEFT:
-
-		break;
-	case GLUT_KEY_RIGHT:
-
-		break;
-	default:
-		break;
-	}
-	visualizacao();
-	glutPostRedisplay();
 }
 
 void sol(){
@@ -276,7 +269,7 @@ void colisaoPredio(){
 				colidiuPredio = true;
 
 				printf("colidiu na altura %d: \n", predios[i].altura);
-				printf("colidiu na largura %d: \n", predios[i].pontos);
+				//printf("colidiu na largura %d: \n", predios[i].pontos);
 				transladaBananaY = 500;
 				transladaBananaX = 20;
 			}
@@ -294,6 +287,43 @@ void animacao(int valor){
 	glutPostRedisplay();
 	glutTimerFunc(150, animacao, 1);
 }
+void DesenhaTexto(void *font, char *string){
+	// Exibe caractere a caractere
+	while (*string)
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, *string++);
+}
+
+void start(){
+	glColor3i(1, 1, 1);
+	glRasterPos2f(5, 580);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Jogador 1");
+	glRasterPos2f(5, 560);
+	_itoa_s(angArremesso, arremesso, 10);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Angulo: ");
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, arremesso);
+	//scanf_s("%d", &angArremesso);
+	glRasterPos2f(5, 540);
+	_itoa_s(velocidade, vel, 10);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Velocidade: ");
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, vel);
+	//scanf_s("%d",&velocidade);
+	glRasterPos2f(350, 580);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Gravidade: 9,8");
+	glRasterPos2f(350, 560);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "vento -->");
+	glRasterPos2f(650, 580);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Jogador 2");
+	glRasterPos2f(650, 560);
+	_itoa_s(angArremesso, arremesso, 10);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Angulo: ");
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, arremesso);
+	//scanf_s("%d", &angArremesso);
+	glRasterPos2f(650, 540);
+	_itoa_s(velocidade, vel, 10);
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, "Velocidade: ");
+	DesenhaTexto(GLUT_BITMAP_8_BY_13, vel);
+	//scanf_s("%d", &velocidade);
+}
 
 
 void desenha() {
@@ -305,13 +335,13 @@ void desenha() {
 	//glTranslatef(janela_largura / 2, janela_altura / 2, 0.0f);
 
 	glViewport(0, 0, janela_largura, janela_altura);
+
+	start();
 	sol();
 	banana();
-	//predio1();
 	pintarPredios(predios, qtdePredios);
 	colisaoPredio();
-
-
+	
 	glutSwapBuffers();
 }
 
@@ -320,8 +350,8 @@ void janela(GLsizei w, GLsizei h){
 	glLoadIdentity();
 	gluOrtho2D(0, janela_largura, 0, janela_altura);
 	glMatrixMode(GL_MODELVIEW);
-
 }
+
 
 void inicializa() {
 	glMatrixMode(GL_PROJECTION);
