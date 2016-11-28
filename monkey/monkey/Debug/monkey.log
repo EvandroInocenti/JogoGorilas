@@ -1,17 +1,26 @@
-﻿Build started 26/11/2016 08:47:22.
-     1>Project "D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\monkey\monkey.vcxproj" on node 2 (Build target(s)).
+﻿Build started 27/11/2016 22:48:23.
+     1>Project "D:\UNOESC\2016\Semestre 2\PGII\JogoMonkey\monkey\monkey\monkey.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
          Source.cpp
-     1>d:\documents\unoesc\unoesc 2016\semestre ii\grafica ii\trabalhofinal\jogogorilas\monkey\monkey\source.cpp(55): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>d:\documents\unoesc\unoesc 2016\semestre ii\grafica ii\trabalhofinal\jogogorilas\monkey\monkey\source.cpp(58): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>d:\documents\unoesc\unoesc 2016\semestre ii\grafica ii\trabalhofinal\jogogorilas\monkey\monkey\source.cpp(143): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>d:\documents\unoesc\unoesc 2016\semestre ii\grafica ii\trabalhofinal\jogogorilas\monkey\monkey\source.cpp(170): warning C4244: 'argument' : conversion from 'double' to 'GLint', possible loss of data
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\Debug\monkey.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\Debug\monkey.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\Debug\monkey.lib" /MACHINE:X86 Debug\Source.obj
-         monkey.vcxproj -> D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\Debug\monkey.exe
-     1>Done Building Project "D:\Documents\UNOESC\UNOESC 2016\Semestre II\grafica II\TrabalhoFinal\JogoGorilas\monkey\monkey\monkey.vcxproj" (Build target(s)).
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(92): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(95): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(165): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(166): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(167): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(239): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(260): error C2676: binary '[' : 'PREDIO' does not define this operator or a conversion to a type acceptable to the predefined operator
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(260): error C2228: left of '.pontos' must have class/struct/union
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(264): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(267): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(280): warning C4258: 'i' : definition from the for loop is ignored; the definition from the enclosing scope is used
+                 d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(269) : definition of 'i' ignored
+                 d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(253) : definition of 'i' used
+     1>d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(281): warning C4258: 'i' : definition from the for loop is ignored; the definition from the enclosing scope is used
+                 d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(269) : definition of 'i' ignored
+                 d:\unoesc\2016\semestre 2\pgii\jogomonkey\monkey\monkey\source.cpp(253) : definition of 'i' used
+     1>Done Building Project "D:\UNOESC\2016\Semestre 2\PGII\JogoMonkey\monkey\monkey\monkey.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.82
+Time Elapsed 00:00:01.00

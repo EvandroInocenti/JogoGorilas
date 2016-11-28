@@ -35,6 +35,7 @@ void pintarPredio(PREDIO* predio);
 void pintarPredios(PREDIO* predios, int qtdePredios);
 
 bool criarPredios = true;
+bool colidiuPredio = false;
 
 int larguraIni = -400, larguraFim = -300;
 int alturaIni = -400, alturaFim = -100;
@@ -85,8 +86,9 @@ void teclasEspeciais(int tecla, int x, int y){
 }
 
 void sol(){
+	
 	glPushMatrix();
-	glTranslatef(0, 200, 0);
+	glTranslatef(400, 500, 0);
 	glColor3f(1.0, 0.6, 0.2);
 	GLfloat circ_pnt = 100;
 	GLfloat angCirc, raioX = 30.0f, raioY = 30.0f;
@@ -101,6 +103,8 @@ void sol(){
 	glPopMatrix();
 
 	//raios
+	glPushMatrix();
+	glTranslatef(400, 300, 0);
 	glBegin(GL_LINES);
 	glVertex2d(30, 200);
 	glVertex2d(60, 200);
@@ -133,10 +137,11 @@ void sol(){
 	glVertex2d(6, 213);
 	glVertex2d(13, 213);
 	glEnd();
+	glPopMatrix();
 
 	//boca
 	glPushMatrix();
-	glTranslatef(0, 190, 0);
+	glTranslatef(400, 490, 0);
 	GLfloat circ = 100;
 	GLfloat angBoca, rX = 14.0f, rY = 2.0f;
 	glBegin(GL_POLYGON);
@@ -159,7 +164,7 @@ PREDIO* createPredio(int posIni, int largura) {
 
 	predio->red = (rand() % 100) + 1;
 	predio->green = (rand() % 100) + 1;
-	predio->blue = (rand() % 100) + 1;
+	predio->blue = (rand() % 60) + 1;
 
 	predio->red /= 100.0;
 	predio->green /= 100.0;
@@ -174,6 +179,7 @@ PREDIO* createPredio(int posIni, int largura) {
 			predio->pontos[x][y].x = x + posIni;
 			predio->pontos[x][y].y = y;
 		}
+
 	}
 	return predio;
 }
@@ -238,48 +244,44 @@ void banana(){
 	glVertex2i(0, 0);
 	glVertex2i(-5, 0);
 	glVertex2i(-13, 5);
-
-	/*
-	glBegin(GL_QUADS);
-	glVertex2i(-10, -10);
-	glVertex2i(-10, 10);
-	glVertex2i(10, 10);
-	glVertex2i(10, -10);
-	*/
 	glEnd();
 	glPopMatrix();
 
 }
 
-void colisao(){
-
-	
-	for (int i = 0; i < qtdePredios; i++)
-	{
-		//printf("colidiu na altura %d: \n", transladaBananaY);
-
+void colisaoPredio(){
+	for (int i = 0; i < qtdePredios; i++){
 		if ((transladaBananaY <= predios[i].altura)) {
 			if ((transladaBananaX >= predios[i].posIni) && (transladaBananaX <= (predios[i].posIni + predios[i].lagura))){
-
-				glColor3i(0.0, 0.0, 1.0);
-				glPointSize(5);
-
 				//teste de colisão
-				glBegin(GL_POINTS);
-				glVertex2i(-350, -100);
-				glVertex2i(-355, -105);
-				glVertex2i(-350, -105);
-				glVertex2i(-355, -100);
+				
+				int colideLarg = predios[i].lagura/3;
+
+				glTranslated(colideLarg, predios[i].altura, 0);
+				
+				glColor3f(1.0, 0.2, 0.0);
+				GLfloat circ = 100;
+				GLfloat angExp, rX = 8.0f, rY = 5.0f;
+				GLfloat ang = 2 * PI;
+				glBegin(GL_POLYGON);
+				for (int i = 0; i < circ; i++){
+					angExp = (ang*i) / circ;
+					glVertex2f(cos(angExp)*rX, sin(angExp)*rY);
+					
+					//predio->pontos[x][y].ativo = false;		
+
+				}
 				glEnd();
 
-				printf("colidiu na altura %d: \n", transladaBananaX);
+				colidiuPredio = true;
+
+				printf("colidiu na altura %d: \n", predios[i].altura);
+				printf("colidiu na largura %d: \n", predios[i].pontos);
 				transladaBananaY = 500;
 				transladaBananaX = 20;
 			}
 		}
 	}
-
-
 }
 
 void animacao(int valor){
@@ -307,7 +309,7 @@ void desenha() {
 	banana();
 	//predio1();
 	pintarPredios(predios, qtdePredios);
-	colisao();
+	colisaoPredio();
 
 
 	glutSwapBuffers();
