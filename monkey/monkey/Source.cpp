@@ -79,7 +79,7 @@ void teclado(unsigned char key, int x, int y) {
 }
 
 void sol(){
-	
+
 	glPushMatrix();
 	glTranslatef(400, 500, 0);
 	glColor3f(1.0, 0.6, 0.2);
@@ -147,7 +147,7 @@ void sol(){
 }
 
 PREDIO* createPredio(int posIni, int largura) {
-	PREDIO* predio = (PREDIO*) malloc(sizeof(PREDIO));
+	PREDIO* predio = (PREDIO*)malloc(sizeof(PREDIO));
 	predio->posIni = posIni;
 	predio->altura = (rand() % 201) + 200;
 	if (largura > 0)
@@ -179,9 +179,9 @@ PREDIO* createPredio(int posIni, int largura) {
 
 PREDIO* putPredio(PREDIO* predios, PREDIO* newPredio) {
 	qtdePredios++;
-	PREDIO* lstPredios = (PREDIO*) calloc(qtdePredios, sizeof(PREDIO));
+	PREDIO* lstPredios = (PREDIO*)calloc(qtdePredios, sizeof(PREDIO));
 
-	for (int i = 0; i < (qtdePredios-1); i++)
+	for (int i = 0; i < (qtdePredios - 1); i++)
 	{
 		lstPredios[i] = predios[i];
 	}
@@ -190,7 +190,7 @@ PREDIO* putPredio(PREDIO* predios, PREDIO* newPredio) {
 }
 
 PREDIO* createPredios() {
-	int larguraTotalAtual = 0; 
+	int larguraTotalAtual = 0;
 
 	while (larguraTotalAtual < janela_largura){
 		PREDIO* newPredio = createPredio(larguraTotalAtual);
@@ -243,37 +243,58 @@ void banana(){
 }
 
 void colisaoPredio(){
-	for (int i = 0; i < qtdePredios; i++){
-		if ((transladaBananaY <= predios[i].altura)) {
-			if ((transladaBananaX >= predios[i].posIni) && (transladaBananaX <= (predios[i].posIni + predios[i].lagura))){
-				//teste de colisão
-				
-				int colideLarg = predios[i].lagura/3;
+	PREDIO* predioAtual = predios;
 
-				glTranslated(colideLarg, predios[i].altura, 0);
-				
-				glColor3f(1.0, 0.2, 0.0);
-				GLfloat circ = 100;
-				GLfloat angExp, rX = 8.0f, rY = 5.0f;
-				GLfloat ang = 2 * PI;
-				glBegin(GL_POLYGON);
-				for (int i = 0; i < circ; i++){
-					angExp = (ang*i) / circ;
-					glVertex2f(cos(angExp)*rX, sin(angExp)*rY);
-					
-					//predio->pontos[x][y].ativo = false;		
+	for (int i = 0; i < qtdePredios; i++){
+
+		if ((transladaBananaX <= predios[i].altura))
+
+
+		if ((transladaBananaY <= predios[i].altura) &&
+			(transladaBananaX >= predios[i].posIni) && 
+			(transladaBananaX <= (predios[i].posIni + predios[i].lagura))){
+			//teste de colisão
+
+
+			for (int coluna = 0; coluna <= predios[i].lagura; coluna++)
+			{
+				for (int linha = 0; linha <= predios[i].altura; linha++)
+				{
+					double distancia = sqrt(
+						pow((predios[i].pontos[coluna][linha].x - transladaBananaX), 2) +
+						pow((predios[i].pontos[coluna][linha].y - transladaBananaY), 2));
+					if (linha == 0)
+					printf("distancia %f",distancia);
+					if (distancia <= 15.0f) {
+						predios[i].pontos[coluna][linha].ativo = false;
+					}
 
 				}
-				glEnd();
-
-				colidiuPredio = true;
-
-				printf("colidiu na altura %d: \n", predios[i].altura);
-				//printf("colidiu na largura %d: \n", predios[i].pontos);
-				transladaBananaY = 500;
-				transladaBananaX = 20;
 			}
+
+			
+			glTranslated(transladaBananaX, transladaBananaY, 0);
+
+			glColor3f(1.0, 0.2, 0.0);
+			GLfloat circ = 100;
+			GLfloat angExp, rX = 15.0f, rY = 15.0f;
+			GLfloat ang = 2 * PI;
+
+			glBegin(GL_POLYGON);
+			for (int i = 0; i < circ; i++){
+				angExp = (ang*i) / circ;
+				glVertex2f(cos(angExp)*rX, sin(angExp)*rY);
+			}
+			glEnd();
+
+			colidiuPredio = true;
+
+			printf("colidiu na altura %d: \n", predios[i].altura);
+			//printf("colidiu na largura %d: \n", predios[i].pontos);
+			transladaBananaY = 400;
+			transladaBananaX += 10;
 		}
+		predioAtual++;
 	}
 }
 
@@ -341,7 +362,7 @@ void desenha() {
 	banana();
 	pintarPredios(predios, qtdePredios);
 	colisaoPredio();
-	
+
 	glutSwapBuffers();
 }
 
